@@ -41,7 +41,6 @@ const users = (sequelize, DataTypes) => {
       let newToken = jwt.sign({ username: user.username }, process.env.SECRET, {
         expiresIn: "15m",
       });
-      // console.log('************************', newToken);
       user.token = newToken;
       return user;
     }

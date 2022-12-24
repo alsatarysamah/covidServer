@@ -2,14 +2,16 @@
 const express = require("express");
 const { json } = require("express/lib/response");
 
-const {recordCollection} = require("../models/index.js");
+const {recordCollection, recordsTable} = require("../models/index.js");
 const recordRouter = express.Router();
 const bearer=require("../middleware/bearer");
-recordRouter.get("/record",bearer,getAll);
-recordRouter.post("/record",bearer,creatRecord);
-recordRouter.put("/record/:id",bearer,updating);
-recordRouter.delete("/record/:id",bearer,deleting);
-recordRouter.get("/record/:id",bearer,getOneRecored);
+
+
+recordRouter.get("/record",getAll);
+recordRouter.post("/record",creatRecord);
+recordRouter.put("/record/:id",updating);
+recordRouter.delete("/record/:id",deleting);
+recordRouter.get("/record/:id",getOneRecored);
 
 
 ////////////////creat=insert////////////////////
@@ -22,7 +24,9 @@ res.status(201).json(newRecored);
 }
 ///////////select *//////////////////
 async function getAll(req,res){
+    console.log(req.params);
     let record = await recordCollection.read();
+    // let userRecord= await recordsTable.findAll({where:{userId:req.body.userId}})
     res.status(200).json(record);
 
 }
@@ -50,8 +54,16 @@ async function deleting(req,res){
 
 async function getOneRecored(req,res)
 {
+    console.log(req.params);
+
     const id = parseInt(req.params.id);
-    let recored = await recordCollection.read(id);
-    res.status(200).json(recored);
+    console.log("******************************",req.params);
+    // let recored = await recordCollection.read(id);
+    // record = await recordsTable.findOne({ where: { id:id } });
+
+    let userRecord= await recordsTable.findAll({where:{userId:id}})
+    res.status(200).json(userRecord);
 }
 module.exports=recordRouter;
+// let userRecord= await recordsTable.findAll({where:{userId:req.body.id}})
+//
